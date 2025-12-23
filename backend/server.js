@@ -14,7 +14,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-// // --- CORS Setup ---
+// --- CORS Setup ---
 // const allowedOrigins = [
 //   'http://localhost:5173',        // your local frontend
 //   'https://your-frontend-domain.com'  // your deployed frontend (replace later)
