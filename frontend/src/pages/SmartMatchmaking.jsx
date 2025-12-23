@@ -90,7 +90,7 @@ const SmartMatchmaking = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h4" fontWeight={700}>
-        🤝 Smart MatchMaking
+        Smart MatchMaking
       </Typography>
 
       <Typography color="text.secondary" mb={2}>

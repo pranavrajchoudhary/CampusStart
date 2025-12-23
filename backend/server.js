@@ -7,7 +7,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const postRoutes = require('./routes/postRoutes');
-
+const aiAssistantRoutes = require('./routes/aiAssistantRoutes')
 dotenv.config();
 const app = express();
 
@@ -26,22 +26,22 @@ app.use(cors({
     if (allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error('Not allowed by CORS'));
   },
-  credentials: true, 
+  credentials: true,
 }));
 
- 
-mongoose.connect("mongodb://127.0.0.1:27017/campusStart" ,{
+
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log(' Connected to MongoDB'))
-.catch(err => console.error(' MongoDB connection error:', err));
+  .then(() => console.log(' Connected to MongoDB'))
+  .catch(err => console.error(' MongoDB connection error:', err));
 
- 
+
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/posts', postRoutes);
- const matchRoutes = require("./routes/matchRoutes");
+const matchRoutes = require("./routes/matchRoutes");
 
 app.use("/api/match", matchRoutes);
 const ideaRoutes = require("./routes/ideaRoutes");
@@ -53,7 +53,9 @@ app.get('/', (req, res) => {
     status: 'OK',
   });
 });
- 
+
+app.use("/api/ai", aiAssistantRoutes);
+
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => {
   console.log(` Server running at http://localhost:${PORT}`);

@@ -40,7 +40,7 @@ const candidates = await User.find({
 
     let mlResponse;
     try {
-      mlResponse = await axios.post("http://localhost:8000/match", payload);
+      mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/match`, payload);
     } catch (err) {
       // ✅ FIX 7: ML service down
       return res.status(503).json({ message: "ML service unavailable" });
