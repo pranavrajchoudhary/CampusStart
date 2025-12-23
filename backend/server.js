@@ -15,19 +15,18 @@ const app = express();
 app.use(express.json());
 
 // --- CORS Setup ---
-const allowedOrigins = [
-  'http://localhost:5173',        // your local frontend
-  'https://your-frontend-domain.com'  // your deployed frontend (replace later)
-];
+// const allowedOrigins = [
+//   'http://localhost:5173',        // your local frontend
+//   'https://your-frontend-domain.com'  // your deployed frontend (replace later)
+// ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 
 mongoose.connect(process.env.MONGO_URI, {
