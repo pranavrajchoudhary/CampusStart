@@ -10,15 +10,20 @@ import {
   Skeleton,
   IconButton,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import API from "../api/axiosConfig";
+import { useUser } from "../context/UserContext";
+import EditProfileModal from "../assets/compo/EditProfileModal";
+
+// 🔁 Reuse PostCard (IMPORTANT)
+import { motion } from "framer-motion";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
-import { useUser } from "../context/UserContext";
-import EditProfileModal from "../assets/compo/EditProfileModal";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import TextField from "@mui/material/TextField";
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -26,8 +31,10 @@ const ProfilePage = () => {
 
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
+
   const [posts, setPosts] = useState([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
+
   const [openEdit, setOpenEdit] = useState(false);
 
   const isOwner = loggedInUser?._id === userId;
@@ -35,15 +42,13 @@ const ProfilePage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Fetch profile
+  // ---------------- FETCH PROFILE ----------------
   useEffect(() => {
     const fetchProfile = async () => {
-      setLoadingProfile(true);
       try {
         const res = await API.get(`/profile/user/${userId}`);
         setProfile(res.data.user);
       } catch (err) {
-        console.error(err);
         setProfile(null);
       } finally {
         setLoadingProfile(false);
@@ -52,163 +57,260 @@ const ProfilePage = () => {
     fetchProfile();
   }, [userId]);
 
-  // Fetch posts
+  // ---------------- FETCH USER POSTS ONLY ----------------
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoadingPosts(true);
+    const fetchUserPosts = async () => {
       try {
         const res = await API.get(`/posts/user/${userId}`);
-        setPosts(res.data || []);
+        const data = res.data || [];
+
+        const normalized = data.map((p) => ({
+          ...p,
+          likes: Array.isArray(p.likes) ? p.likes : [],
+          comments: Array.isArray(p.comments) ? p.comments : [],
+        }));
+
+        setPosts(normalized);
       } catch (err) {
-        console.error(err);
         setPosts([]);
       } finally {
         setLoadingPosts(false);
       }
     };
-    fetchPosts();
+
+    fetchUserPosts();
   }, [userId]);
 
+  // ---------------- STATE UPDATE HELPERS ----------------
+  const updatePostInState = (postId, patch) => {
+    setPosts((prev) =>
+      prev.map((p) => (p._id === postId ? { ...p, ...patch } : p))
+    );
+  };
+
+  // ---------------- LIKE ----------------
+  const handleToggleLike = async (post) => {
+    const uid = loggedInUser?._id?.toString();
+    if (!uid) return;
+
+    const originalLikes = post.likes || [];
+    const isLiked = originalLikes.includes(uid);
+
+    const updatedLikes = isLiked
+      ? originalLikes.filter((id) => id !== uid)
+      : [...originalLikes, uid];
+
+    updatePostInState(post._id, { likes: updatedLikes });
+
+    try {
+      const res = await API.put(`/posts/like/${post._id}`);
+      if (res.data?.post?.likes) {
+        updatePostInState(post._id, { likes: res.data.post.likes });
+      }
+    } catch {
+      updatePostInState(post._id, { likes: originalLikes });
+    }
+  };
+
+  // ---------------- COMMENT ----------------
+  const handleAddComment = async (
+    postId,
+    text,
+    setLocalLoading,
+    clearInput
+  ) => {
+    if (!text.trim()) return;
+
+    setLocalLoading(true);
+    try {
+      const res = await API.post(`/posts/${postId}/comment`, { text });
+      updatePostInState(postId, { comments: res.data.comments || [] });
+      clearInput();
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+
+  const handleShare = (postId) => {
+    const shareUrl = `${window.location.origin}/posts/${postId}`;
+    navigator.clipboard.writeText(shareUrl).finally(() => {
+      const text = encodeURIComponent(`Check this post: ${shareUrl}`);
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    });
+  };
+
+  // ---------------- LOADING STATES ----------------
   if (loadingProfile) {
     return (
       <Box sx={{ p: 2 }}>
         <Skeleton variant="circular" width={80} height={80} />
-        <Skeleton variant="text" width={150} height={30} sx={{ mt: 1 }} />
-        <Skeleton variant="rectangular" height={120} sx={{ mt: 2 }} />
+        <Skeleton variant="text" width={200} height={30} sx={{ mt: 1 }} />
       </Box>
     );
   }
 
   if (!profile) return <Typography>User not found.</Typography>;
 
-  const displayedSkills = profile.skills?.slice(0, 5) || [];
-  const remainingSkills = (profile.skills?.length || 0) - displayedSkills.length;
-
+  // ---------------- UI ----------------
   return (
     <Box sx={{ p: { xs: 1, sm: 2, md: 4 }, maxWidth: 900, mx: "auto" }}>
-      {/* Profile Header */}
-      <Paper sx={{ p: { xs: 2, sm: 3 }, mb: 3 }}>
+      {/* ---------------- PROFILE HEADER ---------------- */}
+      <Paper sx={{ p: 3, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
             <Avatar
               src={profile.dp || "/default_dp.png"}
-              sx={{ width: isMobile ? 70 : 100, height: isMobile ? 70 : 100 }}
+              sx={{ width: 90, height: 90 }}
             />
           </Grid>
 
           <Grid item xs>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography variant="h6" fontWeight={700}>
               {profile.profileName}
             </Typography>
+            <Typography color="text.secondary">{profile.headline}</Typography>
 
-            <Typography variant="body2" color="text.secondary">
-              {profile.headline}
-            </Typography>
-
-            {/* Skills */}
-            <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {displayedSkills.map((skill, i) => (
-                <Chip key={i} label={skill} size="small" variant="outlined" />
+            <Box mt={1} display="flex" flexWrap="wrap" gap={0.5}>
+              {profile.skills?.map((s, i) => (
+                <Chip key={i} label={s} size="small" />
               ))}
-              {remainingSkills > 0 && (
-                <Chip label={`+${remainingSkills}`} size="small" variant="outlined" />
-              )}
             </Box>
 
-            {profile.bio && <Typography sx={{ mt: 1 }}>{profile.bio}</Typography>}
+            <Box mt={1}>
+            {isOwner ? (
+  <Box display="flex" gap={1} mt={1}>
+    <Button variant="contained" onClick={() => setOpenEdit(true)}>
+      Edit Profile
+    </Button>
+    <Button variant="outlined" href="/">
+      Create Post
+    </Button>
+  </Box>
+) : (
+  <Box display="flex" gap={1} mt={1}>
+    <Button variant="outlined">Collab</Button>
+    <Button variant="outlined">Inspire</Button>
+  </Box>
+)}
 
-            {/* Links */}
-            <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {profile.website && <Button href={profile.website} target="_blank" size="small">Website</Button>}
-              {profile.linkedin && <Button href={profile.linkedin} target="_blank" size="small">LinkedIn</Button>}
-              {profile.github && <Button href={profile.github} target="_blank" size="small">GitHub</Button>}
-              {profile.portfolio && <Button href={profile.portfolio} target="_blank" size="small">Portfolio</Button>}
             </Box>
 
-            {/* Buttons */}
-            <Box sx={{ mt: 1 }}>
-              {isOwner ? (
-                <Button variant="contained" onClick={() => setOpenEdit(true)}>
-                  Edit Profile
-                </Button>
-              ) : (
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <Button variant="outlined">Collab</Button>
-                  <Button variant="outlined">Inspire</Button>
-                </Box>
-              )}
-              <EditProfileModal open={openEdit} handleClose={() => setOpenEdit(false)} />
-            </Box>
+            <EditProfileModal
+              open={openEdit}
+              handleClose={() => setOpenEdit(false)}
+            />
           </Grid>
         </Grid>
       </Paper>
 
-      {/* Posts */}
-      <Box>
-        {loadingPosts ? (
-          Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton
-              key={i}
-              variant="rectangular"
-              height={isMobile ? 200 : 300}
-              sx={{ mb: 3, borderRadius: 2 }}
-            />
-          ))
-        ) : posts.length === 0 ? (
-          <Typography>No posts yet.</Typography>
-        ) : (
-          posts.map((post) => {
-            const likes = Array.isArray(post.likes) ? post.likes : [];
-            const comments = Array.isArray(post.comments) ? post.comments : [];
-            const isLiked = loggedInUser && likes.includes(loggedInUser._id);
+      {/* ---------------- USER POSTS ---------------- */}
+      <Typography variant="h6" mb={2}>
+        Posts
+      </Typography>
 
-            return (
-              <Paper key={post._id} sx={{ mb: 3, p: 2 }}>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    <Avatar src={post.author?.dp || "/default_dp.png"} />
-                  </Grid>
-
-                  <Grid item xs>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      {post.author?.profileName}
-                    </Typography>
-
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(post.createdAt).toLocaleString()}
-                    </Typography>
-
-                    <Typography sx={{ mt: 0.5 }}>{post.content}</Typography>
-
-                    {post.media?.map((m, i) =>
-                      m.type === "image" ? (
-                        <Box key={i} component="img" src={m.url} sx={{ width: "100%", mt: 1, borderRadius: 2 }} />
-                      ) : (
-                        <Box key={i} component="video" controls src={m.url} sx={{ width: "100%", mt: 1, borderRadius: 2 }} />
-                      )
-                    )}
-
-                    {/* Likes / Comments */}
-                    <Box sx={{ mt: 1, display: "flex", gap: 1, alignItems: "center" }}>
-                      <IconButton>
-                        {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                      </IconButton>
-                      <Typography>{likes.length}</Typography>
-
-                      <IconButton>
-                        <CommentIcon />
-                      </IconButton>
-                      <Typography>{comments.length}</Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Paper>
-            );
-          })
-        )}
-      </Box>
+      {loadingPosts ? (
+        <Skeleton variant="rectangular" height={200} />
+      ) : posts.length === 0 ? (
+        <Typography color="text.secondary">No posts yet.</Typography>
+      ) : (
+        posts.map((post) => (
+          <PostCard
+            key={post._id}
+            post={post}
+            currentUser={loggedInUser}
+            onToggleLike={() => handleToggleLike(post)}
+            onAddComment={handleAddComment}
+            onShare={() => handleShare(post._id)}
+          />
+        ))
+      )}
     </Box>
   );
 };
 
 export default ProfilePage;
+
+/* ======================= POST CARD ======================= */
+
+const PostCard = ({
+  post,
+  currentUser,
+  onToggleLike,
+  onAddComment,
+  onShare,
+}) => {
+  const theme = useTheme();
+  const [commentText, setCommentText] = useState("");
+  const [localLoading, setLocalLoading] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+
+  const likesArr = post.likes || [];
+  const commentsArr = post.comments || [];
+  const uid = currentUser?._id?.toString();
+  const isLiked = uid && likesArr.includes(uid);
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+      <Paper sx={{ p: 2, mb: 2, borderRadius: 3 }}>
+        <Typography fontWeight={600}>{post.author?.profileName}</Typography>
+        <Typography color="text.secondary" variant="caption">
+          {new Date(post.createdAt).toLocaleString()}
+        </Typography>
+
+        <Typography mt={1}>{post.content}</Typography>
+
+        <Box mt={1} display="flex" alignItems="center" gap={1}>
+          <IconButton onClick={onToggleLike}>
+            {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <Typography>{likesArr.length}</Typography>
+
+          <IconButton onClick={() => setShowComments((p) => !p)}>
+            <CommentIcon />
+          </IconButton>
+          <Typography>{commentsArr.length}</Typography>
+
+          <Box flex={1} />
+
+          <IconButton onClick={onShare}>
+            <WhatsAppIcon />
+          </IconButton>
+        </Box>
+
+        {showComments && (
+          <Box mt={2}>
+            {commentsArr.map((c) => (
+              <Typography key={c._id} variant="body2">
+                <b>{c.user?.username}:</b> {c.text}
+              </Typography>
+            ))}
+
+            {currentUser && (
+              <Box display="flex" gap={1} mt={1}>
+                <TextField
+                  size="small"
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  fullWidth
+                />
+                <Button
+                  onClick={() =>
+                    onAddComment(
+                      post._id,
+                      commentText,
+                      setLocalLoading,
+                      () => setCommentText("")
+                    )
+                  }
+                  disabled={localLoading}
+                >
+                  Post
+                </Button>
+              </Box>
+            )}
+          </Box>
+        )}
+      </Paper>
+    </motion.div>
+  );
+};

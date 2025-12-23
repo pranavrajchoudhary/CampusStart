@@ -53,6 +53,13 @@ const userSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 }, { timestamps: true });
+userSchema.pre("save", function (next) {
+  if (!this.profileName) {
+    this.profileName = this.username;
+  }
+  next();
+});
+
 // 🔹 Auto-generate matchProfileText for ML & matchmaking
 userSchema.pre("save", function (next) {
   // Only update if relevant fields changed OR new user

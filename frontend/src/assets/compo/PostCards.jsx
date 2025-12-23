@@ -230,7 +230,8 @@ const isLiked = uid && likesArr.includes(uid);
           <Grid item xs>
             <Typography
               component={RouterLink}
-              to={`/profile/${post.author?._id}`}
+              to={`/dashboard/profile/${post.author?._id}`}
+
               sx={{
                 textDecoration: "none",
                 color: "text.primary",

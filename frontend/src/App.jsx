@@ -29,7 +29,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/smart-matchmaking" element={<SmartMatchmaking />} />
 
-        <Route path="/profile/:userId" element={<ProfilePage />} /> {/* Single public profile route */}
+        {/* <Route path="/profile/:userId" element={<ProfilePage />} /> Single public profile route */}
       </Route>
 
       {/* Protected Dashboard Routes */}
@@ -43,6 +43,8 @@ function App() {
   }
 >
   <Route index element={<Dashboard />} />
+    <Route path="profile/:userId" element={<ProfilePage />} />
+
   <Route path="ai-brainstormer" element={<AIView />} />
   <Route path="community" element={<CommunityView />} />
   <Route path="investor-connect" element={<InvestorView />} />
