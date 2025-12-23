@@ -8,7 +8,7 @@ export const features = [
   {
     title: 'Founder Matchmaking',
     description: 'Find a co-founder with complementary skills. Search for designers, engineers, or marketers from your campus.',
-    image: 'https://img.freepik.com/free-vector/business-team-discussing-ideas-presentation_74855-2-discussing-ideas.jpg',
+    image: 'https://cdni.iconscout.com/illustration/premium/thumb/startup-founder-with-innovative-idea-illustration-svg-download-png-11826403.png',
   },
   {
     title: 'Investor Connect',

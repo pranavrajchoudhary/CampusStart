@@ -1,79 +1,82 @@
+require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
+
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
-// 🔗 DB CONNECT
-mongoose.connect("mongodb://127.0.0.1:27017/campusStart", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const skillsPool = [
-  ["React", "Node", "MongoDB"],
-  ["Python", "ML", "AI"],
-  ["UI/UX", "Figma"],
-  ["Marketing", "SEO", "Growth"],
-  ["Data Science", "Python"],
-  ["Next.js", "TypeScript"],
-];
-
-const interestsPool = [
-  ["AI", "EdTech"],
-  ["Fintech", "Startups"],
-  ["Social Impact"],
-  ["Web3"],
-  ["HealthTech"],
-];
-
-const roles = [
-  "Developer",
-  "Designer",
-  "Marketer",
-  "Researcher",
-  "Founder",
-];
-
-const createUsers = async () => {
+(async () => {
   try {
-    await User.deleteMany(); // ❗ optional: clears old users
-    console.log("Old users cleared");
+    console.log("🔌 Connecting to MongoDB...");
 
-    const users = [];
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 20000, // ⏱️ important
+    });
 
-    for (let i = 1; i <= 20; i++) {
-      const skills = skillsPool[i % skillsPool.length];
-      const interests = interestsPool[i % interestsPool.length];
-      const role = roles[i % roles.length];
+    console.log("✅ MongoDB connected for seeding");
 
-      const matchProfileText = `
-        ${skills.join(" ")}
-        ${interests.join(" ")}
-        ${role}
-        Aspiring Innovator CampusStart
-      `;
+    // 🔥 VERY IMPORTANT: disable buffering
+    mongoose.set("bufferCommands", false);
 
-      users.push({
-        username: `testuser${i}`,
-        email: `test${i}@gmail.com`,
-        password: "1111", // 🔐 auto-hashed by schema
-        profileName: `Test User ${i}`,
-        instituteName: "CampusStart University",
+    // await User.deleteMany();
+    console.log("🧹 Old users cleared");
+
+    const users = [
+      {
+        username: "Aarav Sharma",
+        email: "test1@gmail.com",
+        password: "1111",
+        profileName: "Aarav Sharma",
+        instituteName: "IIT Delhi",
         department: "CSE",
-        skills,
-        interests,
-        role,
-        headline: "Building the future with CampusStart 🚀",
-        matchProfileText,
-      });
-    }
+        skills: ["React", "Node.js", "MongoDB"],
+        interests: ["AI", "Startups"],
+        role: "Developer",
+        headline: "Full-stack dev building scalable student products 🚀",
+      },
+      {
+        username: "Riya Verma",
+        email: "test2@gmail.com",
+        password: "1111",
+        profileName: "Riya Verma",
+        instituteName: "BITS Pilani",
+        department: "Design",
+        skills: ["UI/UX", "Figma", "Product Design"],
+        interests: ["EdTech", "Social Impact"],
+        role: "Designer",
+        headline: "Designing meaningful student-first experiences 🎨",
+      },
+      {
+        username: "Kunal Mehta",
+        email: "test3@gmail.com",
+        password: "1111",
+        profileName: "Kunal Mehta",
+        instituteName: "IIM Bangalore",
+        department: "Management",
+        skills: ["Marketing", "Growth", "SEO"],
+        interests: ["Fintech", "Startups"],
+        role: "Marketer",
+        headline: "Growth & GTM strategist for early-stage startups 📈",
+      },
+      {
+        username: "Ekaashi Gupta",
+        email: "test4@gmail.com",
+        password: "1111",
+        profileName: "Ekaashi Gupta",
+        instituteName: "Delhi University",
+        department: "Economics",
+        skills: ["Research", "Data Analysis", "Excel"],
+        interests: ["Policy", "Social Impact"],
+        role: "Researcher",
+        headline: "Student researcher exploring data-driven impact 📊",
+      },
+    ];
 
-    await User.insertMany(users);
-    console.log("✅ 20 Dummy Users Inserted Successfully");
+    await User.insertMany(users, { ordered: true });
+    console.log("✅ Users seeded successfully");
 
-    process.exit();
+    await mongoose.disconnect();
+    process.exit(0);
   } catch (err) {
-    console.error("❌ Error seeding users:", err);
+    console.error("❌ Seeding failed:", err);
     process.exit(1);
   }
-};
-
-createUsers();
+})();

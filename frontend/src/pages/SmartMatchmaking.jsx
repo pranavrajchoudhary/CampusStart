@@ -88,7 +88,7 @@ const SmartMatchmaking = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 } }}>
       <Typography variant="h4" fontWeight={700}>
         Smart MatchMaking
       </Typography>
@@ -99,26 +99,47 @@ const SmartMatchmaking = () => {
 
       {/* ---------------- EXISTING IDEAS ---------------- */}
       {ideas.length > 0 && (
-        <Box mb={3}>
+        <Box
+          mb={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1.5,
+          }}
+        >
           <TextField
             select
             label="Use Saved Idea"
             fullWidth
             value={selectedIdea}
             onChange={(e) => setSelectedIdea(e.target.value)}
+            sx={{
+              "& .MuiSelect-select": {
+                whiteSpace: "normal",        // ✅ allow wrap
+              },
+            }}
           >
             {ideas.map((idea) => (
-              <MenuItem key={idea._id} value={idea._id}>
+              <MenuItem
+                key={idea._id}
+                value={idea._id}
+                sx={{
+                  whiteSpace: "normal",       // ✅ mobile wrap
+                  lineHeight: 1.3,
+                }}
+              >
                 {idea.title}
               </MenuItem>
             ))}
           </TextField>
 
           <Button
-            sx={{ mt: 1 }}
             variant="outlined"
             onClick={handleMatchExisting}
             disabled={!selectedIdea || loading}
+            sx={{
+              alignSelf: { xs: "stretch", sm: "flex-start" }, // ✅ full width on mobile
+            }}
           >
             Match This Idea
           </Button>
@@ -126,37 +147,64 @@ const SmartMatchmaking = () => {
       )}
 
       {/* ---------------- NEW IDEA FORM ---------------- */}
-      <Button variant="contained" onClick={() => setOpenForm(p => !p)}>
+      <Button
+        variant="contained"
+        onClick={() => setOpenForm(p => !p)}
+        sx={{ mb: 1 }}
+      >
         {openForm ? "Close Form" : "Create New Idea"}
       </Button>
 
       <Collapse in={openForm}>
-        <Box display="grid" gap={2} mt={2}>
-          <TextField label="Title" name="title" onChange={handleChange} />
-          <TextField label="Description" name="description" multiline rows={3} onChange={handleChange} />
-          <TextField label="Domain" name="domain" onChange={handleChange} />
-          <TextField label="Skills" name="requiredSkills" onChange={handleChange} />
-          <TextField label="Roles" name="rolesNeeded" onChange={handleChange} />
+        <Box
+          display="grid"
+          gap={2}
+          mt={2}
+          sx={{
+            gridTemplateColumns: { xs: "1fr", sm: "1fr" }, // explicit mobile safety
+          }}
+        >
+          <TextField label="Title" name="title" onChange={handleChange} fullWidth />
+          <TextField label="Description" name="description" multiline rows={3} onChange={handleChange} fullWidth />
+          <TextField label="Domain" name="domain" onChange={handleChange} fullWidth />
+          <TextField label="Skills" name="requiredSkills" onChange={handleChange} fullWidth />
+          <TextField label="Roles" name="rolesNeeded" onChange={handleChange} fullWidth />
 
-          <Button variant="contained" onClick={handleSubmit} disabled={loading}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={loading}
+            sx={{ width: { xs: "100%", sm: "auto" } }} // ✅ mobile full width
+          >
             Create & Match
           </Button>
         </Box>
       </Collapse>
 
-      {loading && <CircularProgress sx={{ mt: 2 }} />}
+      {loading && (
+        <Box mt={2}>
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* ---------------- MATCH RESULTS ---------------- */}
       {matches.length > 0 && (
         <Grid container spacing={2} mt={3}>
           {matches.map((user) => (
             <Grid item xs={12} sm={6} key={user._id}>
-              <Card>
+              <Card sx={{ height: "100%" }}>
                 <CardContent>
                   <Typography variant="h6">{user.profileName}</Typography>
-                  <Typography>{user.headline}</Typography>
+                  <Typography color="text.secondary">{user.headline}</Typography>
 
-                  <Box mt={1}>
+                  <Box
+                    mt={1}
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",        
+                      gap: 0.5,
+                    }}
+                  >
                     {user.skills?.map(skill => (
                       <Chip key={skill} label={skill} size="small" />
                     ))}
@@ -169,7 +217,7 @@ const SmartMatchmaking = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    sx={{ mt: 1 }}
+                    sx={{ mt: 1, width: { xs: "100%", sm: "auto" } }} // ✅ mobile full width
                     onClick={() => navigate(`/dashboard/profile/${user._id}`)}
                   >
                     See Profile
