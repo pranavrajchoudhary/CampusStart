@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sāmyam – Balance Flow</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f3eee3;
+      --card:#faf4ec;
+      --text:#2b2725;
+      --muted:#6b655f;
+      --shadow:0 8px 22px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box;}
+
+    body{
+      margin:0;
+      background:var(--bg);
+      font-family:"Inter",sans-serif;
+      color:var(--text);
+      display:flex;
+      justify-content:center;
+      padding:32px 14px;
+    }
+
+    .container{
+      max-width:1100px;
+      width:100%;
+    }
+
+    .screen{
+      display:none;
+      animation:fade .5s ease;
+      text-align:center;
+    }
+    .active{ display:block; }
+
+    @keyframes fade{
+      from{opacity:0; transform:translateY(20px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .logo{
+      font-family:"Playfair Display",serif;
+      font-size:32px;
+      font-weight:600;
+    }
+    .logo small{
+      display:block;
+      font-size:11px;
+      margin-top:-4px;
+      color:var(--muted);
+    }
+
+    h1{
+      font-family:"Playfair Display",serif;
+      font-size:44px;
+      margin:22px 0 12px;
+      line-height:1.1;
+    }
+    .subtitle{
+      color:var(--muted);
+      max-width:700px;
+      margin:0 auto 28px;
+      font-size:16px;
+    }
+
+    .btn{
+      padding:12px 28px;
+      font-size:16px;
+      border-radius:12px;
+      background:#e6d7c4;
+      color:var(--text);
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    /* FORM SCREEN */
+    .card{
+      background:var(--card);
+      padding:24px;
+      border-radius:18px;
+      max-width:520px;
+      margin:0 auto;
+      text-align:left;
+      box-shadow:var(--shadow);
+    }
+
+    .form-row{
+      display:flex;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .field{ flex:1; display:flex; flex-direction:column; }
+    label{ font-size:12px; color:var(--muted); margin-bottom:5px; }
+
+    input,select{
+      padding:10px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.1);
+      font-size:14px;
+    }
+
+    /* SCREEN 3 */
+    .box{
+      background:var(--card);
+      padding:22px;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      max-width:700px;
+      margin:0 auto 22px;
+      text-align:left;
+    }
+    .box h2{
+      font-family:"Playfair Display",serif;
+      margin:0 0 10px;
+    }
+    ul{ margin:0; padding-left:18px; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ---------------- SCREEN 1 ---------------- -->
+    <div id="screen1" class="screen active">
+      <div class="logo">Sāmyam <small>feel your equilibrium</small></div>
+
+      <h1>From medical reports to<br>mindful meals</h1>
+
+      <p class="subtitle">
+        Sāmyam recommends foods that complement your body’s needs — enhancing recovery,
+        supporting wellness, and promoting vitality.
+      </p>
+
+      <button class="btn" onclick="goTo(2)">Begin Your Balance</button>
+    </div>
+
+
+    <!-- ---------------- SCREEN 2 ---------------- -->
+    <div id="screen2" class="screen">
+      <div class="logo">Sāmyam <small>your wellness profile</small></div>
+
+      <h1>Create Your Profile</h1>
+
+      <div class="card">
+        <div class="form-row">
+          <div class="field">
+            <label>Your Name</label>
+            <input type="text" required>
+          </div>
+          <div class="field" style="max-width:120px;">
+            <label>Age</label>
+            <input type="number" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Gender</label>
+            <select required>
+              <option>Select</option>
+              <option>Female</option>
+              <option>Male</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input type="text" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Upload Medical Report</label>
+            <input type="file" required>
+          </div>
+          <div class="field">
+            <label>Any Allergies</label>
+            <select required>
+              <option>None</option>
+              <option>Nuts</option>
+              <option>Dairy</option>
+              <option>Gluten</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn" style="margin-top:10px;" onclick="goTo(3)">Continue</button>
+      </div>
+    </div>
+
+
+    <!-- ---------------- SCREEN 3 ---------------- -->
+    <div id="screen3" class="screen">
+
+      <div class="logo">Sāmyam <small>Your personalized balance</small></div>
+
+      <h1>Your Nutritional Guidance</h1>
+
+      <div class="box">
+        <h2>Consider Eating</h2>
+        <ul>
+          <li>Fresh fruits</li>
+          <li>Green vegetables</li>
+          <li>High-fiber foods</li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <h2>Avoid These</h2>
+        <ul>
+          <li>Spicy foods</li>
+          <li>High sugar snacks</li>
+          <li>Fried items</li>
+        </ul>
+      </div>
+
+      <button class="btn">Get Full List</button>
+    </div>
+
+  </div>
+
+  <script>
+    function goTo(n){
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen'+n).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
