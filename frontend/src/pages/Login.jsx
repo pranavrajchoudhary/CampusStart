@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Paper,
@@ -17,17 +17,32 @@ const Login = () => {
   const { login } = useUser();
   const navigate = useNavigate();
 
+  // ✅ NEW: loading state
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // 🛑 prevent duplicate submits
+    if (loading) return;
+
+    setLoading(true);
+
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
 
-    const success = await login(email, password);
-    if (success) {
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials. Please try again.");
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/dashboard");
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,10 +65,7 @@ const Login = () => {
       <Box
         sx={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
+          inset: 0,
           background: "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7))",
           zIndex: 0,
         }}
@@ -91,83 +103,73 @@ const Login = () => {
             <LockOutlinedIcon sx={{ color: "white" }} />
           </Avatar>
 
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+          <Typography variant="h5" fontWeight={700}>
             Welcome Back 👋
           </Typography>
+
           <Typography
             variant="body2"
             sx={{ color: "rgba(255,255,255,0.8)", mb: 3 }}
           >
-            We're glad to see you again. Let’s continue your journey!
+            {loading ? "Signing you in..." : "We're glad to see you again."}
           </Typography>
 
           {/* Form */}
           <Box component="form" noValidate onSubmit={handleSubmit}>
-            {[
-              { name: "email", type: "email", placeholder: "Email Address" },
-              { name: "password", type: "password", placeholder: "Password" },
-            ].map((field, i) => (
-              <TextField
-                key={i}
-                {...field}
-                required
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: { color: "rgba(255,255,255,0.8)" },
-                }}
-                InputProps={{
-                  style: {
-                    color: "#fff",
-                    backgroundColor: "rgba(255,255,255,0.1)",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.2)",
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { border: "none" },
-                    "&:hover fieldset": {
-                      border: "1px solid rgba(255,255,255,0.4)",
-                    },
-                    "&.Mui-focused fieldset": {
-                      border: "1px solid #0D6EFD",
-                    },
-                  },
-                  "& input": {
-                    textAlign: "center",
-                    "::placeholder": {
-                      color: "rgba(255,255,255,0.6)",
-                      opacity: 1,
-                    },
-                  },
-                }}
-              />
-            ))}
+            <TextField
+              name="email"
+              type="email"
+              placeholder="Email Address"
+              required
+              fullWidth
+              margin="normal"
+              InputProps={{
+                style: {
+                  color: "#fff",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                  borderRadius: 10,
+                },
+              }}
+            />
 
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <TextField
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+              fullWidth
+              margin="normal"
+              InputProps={{
+                style: {
+                  color: "#fff",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                  borderRadius: 10,
+                },
+              }}
+            />
+
+            <motion.div whileHover={{ scale: loading ? 1 : 1.03 }}>
               <Button
                 type="submit"
                 fullWidth
+                disabled={loading}
                 variant="contained"
                 sx={{
                   mt: 3,
-                  mb: 2,
                   py: 1.3,
-                  fontSize: "1rem",
                   borderRadius: "30px",
                   background:
                     "linear-gradient(90deg, #0D6EFD 0%, #F79B25 100%)",
                   fontWeight: 600,
                   textTransform: "none",
+                  opacity: loading ? 0.7 : 1,
                 }}
               >
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
               </Button>
             </motion.div>
 
-            <Typography variant="body2" sx={{ mt: 1, color: "#ccc" }}>
+            <Typography variant="body2" sx={{ mt: 2, color: "#ccc" }}>
               Don’t have an account?{" "}
               <Link component={RouterLink} to="/signup" sx={{ color: "#0D6EFD" }}>
                 Sign up
