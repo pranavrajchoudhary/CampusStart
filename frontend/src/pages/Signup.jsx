@@ -20,28 +20,42 @@ import API from "../api/axiosConfig";
 const Signup = () => {
   const { login } = useUser();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (loading) return;
+
     if (!agree) {
       alert("Please accept the Terms & Conditions to continue.");
       return;
     }
 
     const data = new FormData(event.currentTarget);
+    const email = data.get("email");
+    const password = data.get("password");
+
     const newUser = {
-      username: data.get("firstName") + " " + data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
+      username: `${data.get("firstName")} ${data.get("lastName")}`,
+      email,
+      password,
     };
 
     try {
       setLoading(true);
-      const res = await API.post("/auth/register", newUser);
-      login(res.data);
-      navigate("/dashboard");
+
+      // Register
+      await API.post("/auth/register", newUser);
+
+      // Auto login
+      const success = await login(email, password);
+      if (success) {
+        navigate("/dashboard");
+      } else {
+        navigate("/login");
+      }
     } catch (err) {
       alert(err.response?.data?.message || "Signup failed");
     } finally {
@@ -68,10 +82,7 @@ const Signup = () => {
       <Box
         sx={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
+          inset: 0,
           backgroundColor: "rgba(0,0,0,0.55)",
           zIndex: 0,
         }}
@@ -88,7 +99,7 @@ const Signup = () => {
           elevation={8}
           sx={{
             backdropFilter: "blur(16px)",
-            backgroundColor: "rgba(255, 255, 255, 0.12)",
+            backgroundColor: "rgba(255,255,255,0.12)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "20px",
             p: 5,
@@ -112,11 +123,14 @@ const Signup = () => {
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
             Create Your Account
           </Typography>
+
           <Typography
             variant="body2"
             sx={{ color: "rgba(255,255,255,0.8)", mb: 3 }}
           >
-            Start your journey with <strong>CampusStart 🚀</strong>
+            {loading
+              ? "Setting things up..."
+              : "Start your journey with CampusStart 🚀"}
           </Typography>
 
           {/* Form */}
@@ -128,18 +142,22 @@ const Signup = () => {
                 { name: "email", label: "Email Address", type: "email" },
                 { name: "password", label: "Password", type: "password" },
               ].map((field, i) => (
-                <Grid item xs={12} sm={field.name === "firstName" || field.name === "lastName" ? 6 : 12} key={i}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={
+                    field.name === "firstName" || field.name === "lastName"
+                      ? 6
+                      : 12
+                  }
+                  key={i}
+                >
                   <TextField
-                    {...field}
+                    name={field.name}
+                    type={field.type || "text"}
                     required
                     fullWidth
-                    variant="outlined" 
-                      placeholder={field.label}  
-  InputLabelProps={{
-    style: { color: "rgba(0, 0, 0, 0.8)" },
-  }}
-                    
-                  
+                    placeholder={field.label}
                     InputProps={{
                       style: {
                         color: "#fff",
@@ -167,16 +185,13 @@ const Signup = () => {
               ))}
             </Grid>
 
-            {/* Terms & Conditions */}
+            {/* Terms */}
             <FormControlLabel
               control={
                 <Checkbox
                   checked={agree}
                   onChange={(e) => setAgree(e.target.checked)}
-                  sx={{
-                    color: "white",
-                    "&.Mui-checked": { color: "#0D6EFD" },
-                  }}
+                  sx={{ color: "white", "&.Mui-checked": { color: "#0D6EFD" } }}
                 />
               }
               label={
@@ -189,27 +204,21 @@ const Signup = () => {
                   <Link href="#" sx={{ color: "#0D6EFD" }}>
                     Privacy Policy
                   </Link>
-                  .
                 </Typography>
               }
-              sx={{
-                mt: 1.5,
-                alignItems: "flex-start",
-                textAlign: "left",
-              }}
+              sx={{ mt: 1.5, textAlign: "left" }}
             />
 
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button
                 type="submit"
                 fullWidth
-                variant="contained"
                 disabled={loading}
+                variant="contained"
                 sx={{
                   mt: 3,
                   mb: 2,
                   py: 1.3,
-                  fontSize: "1rem",
                   borderRadius: "30px",
                   background:
                     "linear-gradient(90deg, #0D6EFD 0%, #F79B25 100%)",
