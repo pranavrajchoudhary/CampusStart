@@ -1,14 +1,13 @@
-// src/theme.js
+ 
 import { createTheme } from "@mui/material/styles";
 
-// Brand Colors
-const PRIMARY_BLUE = "#0D6EFD"; // Professional Blue
-const ACCENT_ORANGE = "#F79B25"; // CTA Orange
-const LIGHT_GREY_BG = "#F8F9FA"; // Light background for sections
-const DARK_BG = "#121212"; // Dark mode base
-const DARK_PAPER = "#1E1E1E"; // Dark paper surface
-
-// Function to create theme based on mode
+ 
+const PRIMARY_BLUE = "#0D6EFD";  
+const ACCENT_ORANGE = "#F79B25";  
+const LIGHT_GREY_BG = "#F8F9FA";  
+const DARK_BG = "#121212"; 
+const DARK_PAPER = "#1E1E1E"; 
+ 
 export const getTheme = (mode = "light") => {
   const BODY_TEXT = mode === "light" ? "#212529" : "#EAEAEA";
 
@@ -104,22 +103,22 @@ export const getTheme = (mode = "light") => {
   styleOverrides: {
     body: {
       transition: "background-color 0.4s ease, color 0.4s ease",
-      /* Webkit-based browsers */
+ 
       "&::-webkit-scrollbar": {
-        width: "8px",              // width of vertical scrollbar
-        height: "8px",             // height of horizontal scrollbar
+        width: "8px",              
+        height: "8px",           
       },
       "&::-webkit-scrollbar-track": {
-        background: mode === "light" ? "#f0f0f0" : "#1E1E1E", // track color
+        background: mode === "light" ? "#f0f0f0" : "#1E1E1E",  
       },
       "&::-webkit-scrollbar-thumb": {
-        backgroundColor: mode === "light" ? "#0D6EFD" : "#0D6EFD", // thumb color
+        backgroundColor: mode === "light" ? "#0D6EFD" : "#0D6EFD", 
         borderRadius: "8px",
       },
       "&::-webkit-scrollbar-thumb:hover": {
-        backgroundColor: mode === "light" ? "#0B5ED7" : "#0B5ED7", // hover color
+        backgroundColor: mode === "light" ? "#0B5ED7" : "#0B5ED7",  
       },
-      /* Firefox */
+   
       scrollbarWidth: "thin",
       scrollbarColor: `${mode === "light" ? "#0D6EFD" : "#0D6EFD"} ${mode === "light" ? "#f0f0f0" : "#1E1E1E"}`,
     },
@@ -145,7 +144,7 @@ export const getTheme = (mode = "light") => {
   });
 };
 
-// Default theme (light mode by default)
+ 
 const theme = getTheme("light");
 
 export default theme;
