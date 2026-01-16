@@ -45,7 +45,7 @@ const AIView = () => {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  // Scroll to bottom of chat
+ 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -58,8 +58,7 @@ const AIView = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  // Fetch user's ideas
+ 
   const fetchIdeas = async () => {
     try {
       setIdeasLoading(true);
@@ -76,13 +75,11 @@ const AIView = () => {
       setIdeasLoading(false);
     }
   };
-
-  // Get selected idea object
+ 
   const getSelectedIdeaObject = () => {
     return ideas.find(idea => idea._id === selectedIdea);
   };
-
-  // Load conversation history when idea is selected
+ 
   const handleIdeaChange = async (event) => {
     const ideaId = event.target.value;
     setSelectedIdea(ideaId);
@@ -90,8 +87,7 @@ const AIView = () => {
     setError("");
 
     if (!ideaId) return;
-
-    // Load conversation history
+ 
     try {
       const token = localStorage.getItem("token");
       const response = await API.get(`/ai/conversation/${ideaId}`, {
@@ -103,11 +99,11 @@ const AIView = () => {
       }
     } catch (err) {
       console.error("Error loading conversation:", err);
-      // Don't show error, just start fresh
+   
     }
   };
 
-  // Send message to AI
+ 
   const handleSubmit = async () => {
     if (!input.trim() || !selectedIdea) return;
 
@@ -122,7 +118,7 @@ const AIView = () => {
     setLoading(true);
     setError("");
 
-    // Add temporary AI message
+     
     const tempAiMessage = {
       role: "assistant",
       content: "Thinking...",
@@ -145,7 +141,7 @@ const AIView = () => {
       );
 
       if (response.data.success) {
-        // Replace temp message with actual response
+ 
         setMessages((prev) => {
           const newMessages = [...prev];
           newMessages[newMessages.length - 1] = {
@@ -163,14 +159,13 @@ const AIView = () => {
       console.error("Error sending message:", err);
       setError(err.response?.data?.message || "Failed to get AI response");
 
-      // Remove temp message on error
+ 
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
     }
   };
-
-  // Clear conversation
+ 
   const handleClearChat = async () => {
     if (!selectedIdea) return;
 
@@ -182,7 +177,7 @@ const AIView = () => {
       setMessages([]);
     } catch (err) {
       console.error("Error clearing conversation:", err);
-      setMessages([]); // Clear locally anyway
+      setMessages([]); 
     }
   };
 
@@ -201,7 +196,7 @@ const AIView = () => {
       <Container maxWidth="lg">
         <Fade in={loaded} timeout={800}>
           <Box>
-            {/* 🎯 Idea Selection Dropdown */}
+        
             <Paper
               elevation={3}
               sx={{
@@ -270,7 +265,7 @@ const AIView = () => {
                 </Select>
               </FormControl>
 
-              {/* Selected Idea Info */}
+ 
               {selectedIdeaObj && (
                 <Box
                   sx={{
@@ -311,8 +306,7 @@ const AIView = () => {
                 </Box>
               )}
             </Paper>
-
-            {/* 💬 Chat Interface */}
+ 
             <Paper
               elevation={5}
               sx={{
@@ -327,7 +321,7 @@ const AIView = () => {
                 pointerEvents: selectedIdea ? "auto" : "none",
               }}
             >
-              {/* Header */}
+   
               <Box
                 sx={{
                   display: "flex",
@@ -360,14 +354,14 @@ const AIView = () => {
 
               <Divider sx={{ mb: 2 }} />
 
-              {/* Error Alert */}
+  
               {error && (
                 <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>
                   {error}
                 </Alert>
               )}
 
-              {/* Chat Messages */}
+ 
               <Box
                 ref={chatContainerRef}
                 sx={{
@@ -500,7 +494,7 @@ const AIView = () => {
                 <div ref={messagesEndRef} />
               </Box>
 
-              {/* Input Area */}
+         
               <Box
                 sx={{
                   display: "flex",
