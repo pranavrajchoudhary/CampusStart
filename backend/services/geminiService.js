@@ -7,11 +7,7 @@ class GeminiService {
         this.model = "gemini-2.5-flash-lite";
     }
 
-    /**
-     * Generate system prompt with idea context
-     */
-
-    //.dm format try
+   
     generateSystemPrompt(idea) {
         return `You are an expert brainstormer and domain-aware assistant.
 
@@ -38,33 +34,28 @@ class GeminiService {
 Stay focused on the idea. Do NOT give generic advice.`;
     }
 
-    /**
-     * Format conversation history for Gemini API
-     */
+ 
     formatMessages(conversationHistory, systemPrompt, newQuery) {
         const contents = [];
 
-        // Add system prompt as first user message
+  
         contents.push({
             role: "user",
             parts: [{ text: systemPrompt }]
         });
-
-        // Add acknowledgment from model
+ 
         contents.push({
             role: "model",
             parts: [{ text: "Understood. I will answer all queries strictly in the context of this idea." }]
         });
-
-        // Add conversation history
+ 
         conversationHistory.forEach(msg => {
             contents.push({
                 role: msg.role === "user" ? "user" : "model",
                 parts: [{ text: msg.content }]
             });
         });
-
-        // Add new query
+ 
         contents.push({
             role: "user",
             parts: [{ text: newQuery }]
@@ -72,10 +63,7 @@ Stay focused on the idea. Do NOT give generic advice.`;
 
         return contents;
     }
-
-    /**
-     * Call Gemini API
-     */
+ 
     async askGemini(idea, conversationHistory, userQuery) {
         try {
             const systemPrompt = this.generateSystemPrompt(idea);
@@ -116,12 +104,11 @@ Stay focused on the idea. Do NOT give generic advice.`;
                     }
                 }
             );
-
-            // Extract text from response
+ 
             if (response.data.candidates && response.data.candidates.length > 0) {
                 const candidate = response.data.candidates[0];
 
-                // Check if response was blocked
+     
                 if (candidate.finishReason === "SAFETY") {
                     return {
                         success: false,
@@ -148,7 +135,7 @@ Stay focused on the idea. Do NOT give generic advice.`;
         } catch (error) {
             console.error("Gemini API Error:", error.response?.data || error.message);
 
-            // Handle specific error types
+ 
             if (error.response?.status === 429) {
                 return {
                     success: false,
@@ -169,10 +156,7 @@ Stay focused on the idea. Do NOT give generic advice.`;
             };
         }
     }
-
-    /**
-     * Alternative method using streaming (optional)
-     */
+ 
     async askGeminiStream(idea, conversationHistory, userQuery, onChunk) {
         try {
             const systemPrompt = this.generateSystemPrompt(idea);
@@ -214,7 +198,7 @@ Stay focused on the idea. Do NOT give generic advice.`;
                             if (onChunk) onChunk(text);
                         }
                     } catch (e) {
-                        // Skip invalid JSON
+                      
                     }
                 });
             });
