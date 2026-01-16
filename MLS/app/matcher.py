@@ -9,7 +9,7 @@ def rank_users(idea_text, users):
 
     raw_scores = cosine_similarity(vectors[0:1], vectors[1:])[0]
 
-    # ✅ normalize to 0–1 range
+  
     max_score = max(raw_scores) if max(raw_scores) > 0 else 1
     scores = raw_scores / max_score
 
