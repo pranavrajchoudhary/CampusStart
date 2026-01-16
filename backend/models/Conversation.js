@@ -14,7 +14,7 @@ const conversationSchema = new Schema({
   lastActive: { type: Date, default: Date.now }
 }, { timestamps: true });
 
-// Index for faster queries
+ 
 conversationSchema.index({ ideaId: 1, userId: 1 });
 
 module.exports = mongoose.model("Conversation", conversationSchema);
