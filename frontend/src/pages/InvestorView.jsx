@@ -38,7 +38,7 @@ const InvestorView = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
-      {/* ---------- HERO SECTION ---------- */}
+     
       <Box textAlign="center" mb={6}>
         <Typography
           variant="h3"
@@ -60,7 +60,7 @@ const InvestorView = () => {
         </Typography>
       </Box>
 
-      {/* ---------- COMING SOON ---------- */}
+     
       <Box
         textAlign="center"
         sx={{
@@ -92,7 +92,7 @@ const InvestorView = () => {
         </Typography>
       </Box>
 
-      {/* ---------- FEATURE PREVIEW ---------- */}
+    
       <Grid container spacing={3} mb={6}>
         {features.map((f, i) => (
           <Grid item xs={12} sm={6} md={4} key={i}>
@@ -124,7 +124,7 @@ const InvestorView = () => {
         ))}
       </Grid>
 
-      {/* ---------- ACTION ---------- */}
+     
       <Stack alignItems="center">
         <Button
           variant="contained"
