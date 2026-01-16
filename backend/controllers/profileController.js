@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-/// Get current users profile
+ 
 exports.getMyProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -19,7 +19,7 @@ exports.getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
-///- Update user profile
+ 
 exports.updateProfile = async (req, res) => {
   try {
     const updates = req.body;  
