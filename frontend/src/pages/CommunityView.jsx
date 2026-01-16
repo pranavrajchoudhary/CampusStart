@@ -11,10 +11,10 @@ const CommunityView = () => {
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "100%", maxWidth: 980 }}>
 
-          {/* ⭐ LinkedIn-style Create Post */}
+ 
           <CreatePost onPostCreated={() => setRefresh(!refresh)} />
 
-          {/* Posts */}
+ 
           <PostCards key={refresh} />
 
         </Box>
