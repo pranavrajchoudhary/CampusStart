@@ -6,7 +6,7 @@ const matchTeam = async (req, res) => {
   try {
     const idea = await Idea.findById(req.params.id);
 
-    // ✅ FIX 4: idea not found
+ 
     if (!idea) {
       return res.status(404).json({ message: "Idea not found" });
     }
@@ -19,7 +19,7 @@ const candidates = await User.find({
 });
 
 
-    // ✅ FIX 5: no candidates
+ 
     if (candidates.length === 0) {
       return res.json([]);
     }
@@ -33,7 +33,7 @@ const candidates = await User.find({
       `,
       users: candidates.map(u => ({
         userId: u._id.toString(),
-        // ✅ FIX 6: fallback if missing
+ 
         text: u.matchProfileText || ""
       }))
     };
@@ -42,7 +42,7 @@ const candidates = await User.find({
     try {
       mlResponse = await axios.post(`${process.env.ML_SERVICE_URL}/match`, payload);
     } catch (err) {
-      // ✅ FIX 7: ML service down
+ 
       return res.status(503).json({ message: "ML service unavailable" });
     }
 
@@ -53,7 +53,7 @@ const candidates = await User.find({
     const users = await User.find({ _id: { $in: userIds } })
       .select("username profileName skills role dp headline instituteName");
 
-    // ✅ FIX 8: safe merge
+ 
     const finalResult = topMatches
       .map(match => {
         const user = users.find(u => u._id.toString() === match.userId);
