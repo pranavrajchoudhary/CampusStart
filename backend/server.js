@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
-// Import routes
+ 
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const postRoutes = require('./routes/postRoutes');
@@ -11,14 +10,9 @@ const aiAssistantRoutes = require('./routes/aiAssistantRoutes')
 dotenv.config();
 const app = express();
 
-// Middleware
+ 
 app.use(express.json());
-
-// --- CORS Setup ---
-// const allowedOrigins = [
-//   'http://localhost:5173',        // your local frontend
-//   'https://your-frontend-domain.com'  // your deployed frontend (replace later)
-// ];
+ 
 
 app.use(
   cors({
