@@ -14,7 +14,7 @@ exports.chatWithIdea = async (req, res) => {
       });
     }
 
-    // 1. Fetch the idea
+     
     const idea = await Idea.findById(ideaId);
     if (!idea) {
       return res.status(404).json({ 
@@ -22,8 +22,7 @@ exports.chatWithIdea = async (req, res) => {
         message: "Idea not found" 
       });
     }
-
-    // 2. Get or create conversation
+ 
     let conversation = await Conversation.findOne({ ideaId, userId });
     
     if (!conversation) {
@@ -48,7 +47,7 @@ exports.chatWithIdea = async (req, res) => {
       });
     }
 
-    // 4. Save conversation
+ 
     conversation.messages.push(
       { role: "user", content: query },
       { role: "assistant", content: aiResponse.message }
@@ -56,7 +55,7 @@ exports.chatWithIdea = async (req, res) => {
     conversation.lastActive = new Date();
     await conversation.save();
 
-    // 5. Return response
+ 
     res.json({
       success: true,
       data: {
@@ -75,10 +74,7 @@ exports.chatWithIdea = async (req, res) => {
   }
 };
 
-/**
- * Get conversation history for an idea
- * GET /api/ai/conversation/:ideaId
- */
+ 
 exports.getConversation = async (req, res) => {
   try {
     const { ideaId } = req.params;
@@ -115,11 +111,7 @@ exports.getConversation = async (req, res) => {
     });
   }
 };
-
-/**
- * Clear conversation history
- * DELETE /api/ai/conversation/:ideaId
- */
+ 
 exports.clearConversation = async (req, res) => {
   try {
     const { ideaId } = req.params;
@@ -141,10 +133,7 @@ exports.clearConversation = async (req, res) => {
   }
 };
 
-/**
- * Get all user conversations
- * GET /api/ai/conversations
- */
+ 
 exports.getUserConversations = async (req, res) => {
   try {
     const userId = req.user.id;
