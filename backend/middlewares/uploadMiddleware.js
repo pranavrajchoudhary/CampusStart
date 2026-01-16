@@ -5,9 +5,9 @@ const cloudinary = require("../config/cloudinary");
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "community_uploads", // folder name in Cloudinary
+    folder: "community_uploads",  
     allowed_formats: ["jpg", "jpeg", "png", "mp4", "mov"],
-    resource_type: "auto", // auto-detects image/video
+    resource_type: "auto", 
   },
 });
 
