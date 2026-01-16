@@ -51,9 +51,7 @@ const Dashboard = () => {
       time: "1 day ago",
       avatar: "https://api.multiavatar.com/investor.svg",
     },
-  ];
-
-  // ✅ 1️⃣ Wait while fetching user (prevents rendering before data arrives)
+  ]; 
   if (loading)
     return (
       <Box
@@ -66,7 +64,7 @@ const Dashboard = () => {
       </Box>
     );
 
-  // ✅ 2️⃣ Guard in case user is not logged in
+ 
   if (!user)
     return (
       <Box textAlign="center" mt={10}>
@@ -76,10 +74,10 @@ const Dashboard = () => {
       </Box>
     );
 
-  // ✅ 3️⃣ Main dashboard content
+ 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
-      {/* Header */}
+ 
       <motion.div variants={itemVariants}>
         <Box sx={{ mb: 3 }}>
           <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
@@ -92,7 +90,7 @@ const Dashboard = () => {
       </motion.div>
 
       <Grid container spacing={{ xs: 2, md: 3 }}>
-        {/* Quick Actions */}
+       
         <Grid item xs={12} md={8}>
           <motion.div variants={itemVariants}>
             <Paper
@@ -162,8 +160,7 @@ const Dashboard = () => {
             </Paper>
           </motion.div>
         </Grid>
-
-        {/* Profile Summary */}
+ 
         <Grid item xs={12} md={4}>
           <motion.div variants={itemVariants}>
             <Paper
@@ -186,7 +183,7 @@ const Dashboard = () => {
                   sx={{ width: 70, height: 70, mb: 1.5 }}
                 />
 
-                {/* ✅ Safe check to avoid undefined route before user is ready */}
+                
 {user?.id || user?._id ? (
   <Typography
     variant="subtitle1"
@@ -253,8 +250,7 @@ const Dashboard = () => {
             </Paper>
           </motion.div>
         </Grid>
-
-        {/* Recent Activity */}
+ 
         <Grid item xs={12}>
           <motion.div variants={itemVariants}>
             <Paper
