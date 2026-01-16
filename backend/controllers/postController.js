@@ -1,7 +1,7 @@
 const Post = require("../models/postModel");
 const User = require("../models/User");
 
-// ✅ Create a new post
+ 
 exports.createPost = async (req, res) => {
   try {
     const files = req.files || [];
@@ -25,17 +25,16 @@ exports.createPost = async (req, res) => {
     res.status(500).json({ message: "Server error while creating post" });
   }
 };
-
-// controllers/postController.js
+ 
 exports.getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
       .populate("author", "username dp")
       .populate("comments.user", "username dp")
-      .lean() // 👈 VERY IMPORTANT
+      .lean()  
       .sort({ createdAt: -1 });
 
-    // normalize likes always as strings
+ 
     const normalized = posts.map((p) => ({
       ...p,
       likes: Array.isArray(p.likes)
@@ -51,7 +50,7 @@ exports.getAllPosts = async (req, res) => {
 
 
 
-// ✅ Get posts by a specific user
+ 
 exports.getUserPosts = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -72,8 +71,7 @@ exports.toggleLike = async (req, res) => {
 
     let post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
-
-    // 🔥 Ensure likes always exists
+  
     if (!Array.isArray(post.likes)) {
       post.likes = [];
     }
