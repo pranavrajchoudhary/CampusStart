@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import { Link as RouterLink } from "react-router-dom";
 import { features } from "../utils/mockData";
 
-// Animation
+ 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   visible: {
@@ -31,7 +31,7 @@ const Home = () => {
   return (
     <Box sx={{ bgcolor: theme.palette.background.default }}>
 
-      {/* ================= HERO ================= */}
+     
       <Box
         id="home"
         sx={{
@@ -62,8 +62,8 @@ const Home = () => {
                 fontSize: { xs: "2.3rem", md: "3.8rem" },
                 lineHeight: 1.2,
                 textAlign: "center",
-                color: "#ffffff", // ✅ FIX
-                textShadow: "0 4px 18px rgba(0,0,0,0.6)", // ✅ FIX
+                color: "#ffffff", 
+                textShadow: "0 4px 18px rgba(0,0,0,0.6)", 
               }}
             >
               Build Startups From Your Campus
@@ -104,7 +104,7 @@ const Home = () => {
         </Container>
       </Box>
 
-      {/* ================= ABOUT ================= */}
+    
       <Container
         id="about"
         maxWidth="md"
@@ -119,7 +119,7 @@ const Home = () => {
         </Typography>
       </Container>
 
-      {/* ================= FEATURES ================= */}
+    
       <Container id="features" maxWidth="lg" sx={{ py: 8 }}>
         <Typography
           variant="h3"
@@ -168,7 +168,7 @@ const Home = () => {
         </Grid>
       </Container>
 
-      {/* ================= DEVELOPERS ================= */}
+  
 <Box
   id="developers"
   sx={{
@@ -194,7 +194,7 @@ const Home = () => {
       justifyContent="center"
       alignItems="stretch"
     >
-      {/* -------- Developer 1 -------- */}
+     
       <Grid
         item
         xs={12}
@@ -214,25 +214,8 @@ const Home = () => {
         </Typography>
       </Grid>
 
-      {/* -------- Developer 2 -------- */}
-      <Grid
-        item
-        xs={12}
-        md={5}
-        sx={{
-          textAlign: { xs: "center", md: "left" },
-        }}
-      >
-        <Typography variant="h5" fontWeight={600} gutterBottom>
-          Abhishek Rajpoot
-        </Typography>
-        <Typography color="text.secondary">
-          Machine Learning & Artificial Intelligence Engineer
-          <br />
-          Focused on intelligent matchmaking, AI brainstorming,
-          and data-driven systems.
-        </Typography>
-      </Grid>
+      
+       
     </Grid>
   </Container>
 </Box>
