@@ -17,13 +17,12 @@ const Login = () => {
   const { login } = useUser();
   const navigate = useNavigate();
 
-  // ✅ NEW: loading state
+ 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // 🛑 prevent duplicate submits
+ 
     if (loading) return;
 
     setLoading(true);
@@ -61,7 +60,7 @@ const Login = () => {
         p: 2,
       }}
     >
-      {/* Overlay */}
+ 
       <Box
         sx={{
           position: "absolute",
@@ -71,7 +70,7 @@ const Login = () => {
         }}
       />
 
-      {/* Glass Form */}
+ 
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -104,7 +103,7 @@ const Login = () => {
           </Avatar>
 
           <Typography variant="h5" fontWeight={700}>
-            Welcome Back 👋
+            Welcome Back 
           </Typography>
 
           <Typography
@@ -114,7 +113,7 @@ const Login = () => {
             {loading ? "Signing you in..." : "We're glad to see you again."}
           </Typography>
 
-          {/* Form */}
+ 
           <Box component="form" noValidate onSubmit={handleSubmit}>
             <TextField
               name="email"
