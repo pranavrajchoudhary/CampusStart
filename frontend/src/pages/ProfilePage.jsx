@@ -17,7 +17,7 @@ import API from "../api/axiosConfig";
 import { useUser } from "../context/UserContext";
 import EditProfileModal from "../assets/compo/EditProfileModal";
 
-// 🔁 Reuse PostCard (IMPORTANT)
+ 
 import { motion } from "framer-motion";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -42,7 +42,7 @@ const ProfilePage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // ---------------- FETCH PROFILE ----------------
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -57,7 +57,7 @@ const ProfilePage = () => {
     fetchProfile();
   }, [userId]);
 
-  // ---------------- FETCH USER POSTS ONLY ----------------
+ 
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
@@ -80,15 +80,14 @@ const ProfilePage = () => {
 
     fetchUserPosts();
   }, [userId]);
-
-  // ---------------- STATE UPDATE HELPERS ----------------
+ 
   const updatePostInState = (postId, patch) => {
     setPosts((prev) =>
       prev.map((p) => (p._id === postId ? { ...p, ...patch } : p))
     );
   };
 
-  // ---------------- LIKE ----------------
+ 
   const handleToggleLike = async (post) => {
     const uid = loggedInUser?._id?.toString();
     if (!uid) return;
@@ -111,8 +110,7 @@ const ProfilePage = () => {
       updatePostInState(post._id, { likes: originalLikes });
     }
   };
-
-  // ---------------- COMMENT ----------------
+ 
   const handleAddComment = async (
     postId,
     text,
@@ -139,7 +137,7 @@ const ProfilePage = () => {
     });
   };
 
-  // ---------------- LOADING STATES ----------------
+ 
   if (loadingProfile) {
     return (
       <Box sx={{ p: 2 }}>
@@ -151,10 +149,10 @@ const ProfilePage = () => {
 
   if (!profile) return <Typography>User not found.</Typography>;
 
-  // ---------------- UI ----------------
+ 
   return (
     <Box sx={{ p: { xs: 1, sm: 2, md: 4 }, maxWidth: 900, mx: "auto" }}>
-      {/* ---------------- PROFILE HEADER ---------------- */}
+       
       <Paper sx={{ p: 3, mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
@@ -203,7 +201,7 @@ const ProfilePage = () => {
         </Grid>
       </Paper>
 
-      {/* ---------------- USER POSTS ---------------- */}
+      
       <Typography variant="h6" mb={2}>
         Posts
       </Typography>
@@ -230,7 +228,7 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-/* ======================= POST CARD ======================= */
+ 
 
 const PostCard = ({
   post,
