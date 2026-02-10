@@ -13,10 +13,9 @@ const DashboardLayout = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
+      
       <Sidebar drawerWidth={DRAWER_WIDTH} />
-
-      {/* Main Content */}
+ 
       <Box
         component="main"
         sx={{
@@ -28,17 +27,17 @@ const DashboardLayout = () => {
           transition: "all 0.3s ease",
         }}
       >
-        {/* Toolbar spacer */}
+ 
         <Toolbar />
 
-        {/* Container with reduced padding on mobile */}
+         
         <Container
           maxWidth="lg"
           sx={{
             px: { xs: 1, sm: 3 },
             py: { xs: 1, sm: 3 },
             width: "100%",
-            minHeight: "calc(100vh - 64px)", // account for toolbar height
+            minHeight: "calc(100vh - 64px)",  
           }}
         >
           <Outlet />
