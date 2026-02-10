@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "../../context/UserContext";
-import API from "../../api/axiosConfig"; // ✅ same axios instance used in Signup
+import API from "../../api/axiosConfig";  
 
 const modalStyle = {
   position: "fixed",
@@ -51,7 +51,7 @@ const EditProfileModal = ({ open, handleClose }) => {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const res = await API.get("/profile/me"); // ✅ correct API call
+      const res = await API.get("/profile/me");  
       setFormData(res.data.user);
     } catch (error) {
       console.error("❌ Error fetching profile:", error);
@@ -70,7 +70,7 @@ const EditProfileModal = ({ open, handleClose }) => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const res = await API.put("/profile/update", formData); // ✅ use profile route
+      const res = await API.put("/profile/update", formData);  
       setUser(res.data.user);
       handleClose();
     } catch (error) {
@@ -110,7 +110,7 @@ const EditProfileModal = ({ open, handleClose }) => {
         </Stepper>
 
         <AnimatePresence mode="wait">
-          {/* Step 0 - Basic Info */}
+        
           {activeStep === 0 && (
             <motion.div key="basic" {...slideVariants} transition={{ duration: 0.3 }}>
               <Grid container spacing={2}>
@@ -145,7 +145,7 @@ const EditProfileModal = ({ open, handleClose }) => {
             </motion.div>
           )}
 
-          {/* Step 1 - Academic */}
+         
           {activeStep === 1 && (
             <motion.div key="academic" {...slideVariants} transition={{ duration: 0.3 }}>
               <Grid container spacing={2}>
@@ -162,7 +162,7 @@ const EditProfileModal = ({ open, handleClose }) => {
             </motion.div>
           )}
 
-          {/* Step 2 - Professional */}
+         
           {activeStep === 2 && (
             <motion.div key="professional" {...slideVariants} transition={{ duration: 0.3 }}>
               <Grid container spacing={2}>
@@ -214,7 +214,7 @@ const EditProfileModal = ({ open, handleClose }) => {
             </motion.div>
           )}
 
-          {/* Step 3 - Social Links */}
+          
           {activeStep === 3 && (
             <motion.div key="social" {...slideVariants} transition={{ duration: 0.3 }}>
               <Grid container spacing={2}>
@@ -233,7 +233,7 @@ const EditProfileModal = ({ open, handleClose }) => {
             </motion.div>
           )}
 
-          {/* Step 4 - Review */}
+        
           {activeStep === 4 && (
             <motion.div key="finish" {...slideVariants} transition={{ duration: 0.3, ease: "easeInOut" }}>
               <Box textAlign="center">
@@ -246,7 +246,7 @@ const EditProfileModal = ({ open, handleClose }) => {
           )}
         </AnimatePresence>
 
-        {/* Navigation */}
+        
         <Box display="flex" justifyContent="space-between" mt={4}>
           <Button disabled={activeStep === 0} onClick={handleBack}>Back</Button>
           {activeStep < steps.length - 1 ? (
