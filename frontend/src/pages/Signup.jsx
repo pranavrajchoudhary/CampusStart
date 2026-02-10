@@ -46,10 +46,10 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      // Register
+       
       await API.post("/auth/register", newUser);
 
-      // Auto login
+ 
       const success = await login(email, password);
       if (success) {
         navigate("/dashboard");
@@ -78,7 +78,7 @@ const Signup = () => {
         p: 2,
       }}
     >
-      {/* Overlay */}
+    
       <Box
         sx={{
           position: "absolute",
@@ -88,7 +88,7 @@ const Signup = () => {
         }}
       />
 
-      {/* Glass Form */}
+  
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -133,7 +133,7 @@ const Signup = () => {
               : "Start your journey with CampusStart 🚀"}
           </Typography>
 
-          {/* Form */}
+ 
           <Box component="form" noValidate onSubmit={handleSubmit}>
             <Grid container spacing={2} justifyContent="center">
               {[
@@ -185,7 +185,7 @@ const Signup = () => {
               ))}
             </Grid>
 
-            {/* Terms */}
+          
             <FormControlLabel
               control={
                 <Checkbox
