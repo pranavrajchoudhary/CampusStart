@@ -67,7 +67,7 @@ const PostCards = () => {
     );
   };
 
-  // ---- LIKE FUNCTION ----
+ 
   const handleToggleLike = async (post) => {
   const token = localStorage.getItem("token");
   const uid = user?._id?.toString();
@@ -80,7 +80,7 @@ const PostCards = () => {
     ? originalLikes.filter((id) => id !== uid)
     : [...originalLikes, uid];
 
-  // optimistic UI
+ 
   updatePostInState(post._id, { likes: updatedLikes });
 
   try {
@@ -90,7 +90,7 @@ const PostCards = () => {
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    // sync with backend truth
+   
     if (res.data?.post?.likes) {
       updatePostInState(post._id, { likes: res.data.post.likes });
     }
@@ -101,7 +101,7 @@ const PostCards = () => {
  };
 
 
-  // ---- COMMENT FUNCTION ----
+ 
   const handleAddComment = async (
     postId,
     text,
@@ -179,7 +179,7 @@ const PostCards = () => {
 
 export default PostCards;
 
-/* ----------------------- PostCard ----------------------- */
+ 
 
 const PostCard = ({
   post,
@@ -193,7 +193,7 @@ const PostCard = ({
 
   const [commentText, setCommentText] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
-  const [showComments, setShowComments] = useState(false); // ⭐ NEW STATE FOR TOGGLE
+  const [showComments, setShowComments] = useState(false);  
 
   const likesArr = post.likes || [];
   const commentsArr = post.comments || [];
@@ -218,7 +218,7 @@ const isLiked = uid && likesArr.includes(uid);
           py: { xs: 1.25, sm: 1.5 },
         }}
       >
-        {/* ---------------- Header ---------------- */}
+        
         <Grid container alignItems="center" spacing={1}>
           <Grid item>
             <Avatar
@@ -265,7 +265,7 @@ const isLiked = uid && likesArr.includes(uid);
           </Grid>
         </Grid>
 
-        {/* ---------------- Content ---------------- */}
+       
         <Box mt={1}>
           <Typography variant="body1">{post.content}</Typography>
 
@@ -295,14 +295,14 @@ const isLiked = uid && likesArr.includes(uid);
           )}
         </Box>
 
-        {/* ---------------- Actions ---------------- */}
+        
         <Box mt={1} display="flex" alignItems="center" gap={1}>
           <IconButton onClick={onToggleLike}>
             {isLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
           </IconButton>
           <Typography>{likesArr.length}</Typography>
 
-          {/* ⭐ COMMENT TOGGLE BUTTON */}
+          
           <IconButton onClick={() => setShowComments((prev) => !prev)}>
             <CommentIcon />
           </IconButton>
@@ -317,7 +317,7 @@ const isLiked = uid && likesArr.includes(uid);
           </Tooltip>
         </Box>
 
-        {/* ---------------- Comments Section (toggleable) ---------------- */}
+         
         {showComments && (
           <Box mt={2} borderTop={`1px solid ${theme.palette.divider}`} pt={1}>
             {commentsArr.length === 0 ? (
