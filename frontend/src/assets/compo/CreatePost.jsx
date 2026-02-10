@@ -22,16 +22,14 @@ const CreatePost = ({ onPostCreated }) => {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
 
-  const [mediaFiles, setMediaFiles] = useState([]);       // Cloudinary URLs
+  const [mediaFiles, setMediaFiles] = useState([]);       // Cloudinary URLs dummmy for now
   const [mediaPreview, setMediaPreview] = useState([]);   // Local previews
 
   const [uploading, setUploading] = useState(false);
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
-  // ----------------------------------------------------
-  // RESET FORM
-  // ----------------------------------------------------
+ 
   const reset = () => {
     setContent("");
     setMediaFiles([]);
@@ -40,9 +38,7 @@ const CreatePost = ({ onPostCreated }) => {
     setOpen(false);
   };
 
-  // ----------------------------------------------------
-  // CLOUDINARY UPLOAD
-  // ----------------------------------------------------
+ 
   const handleMediaUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
@@ -82,9 +78,7 @@ const CreatePost = ({ onPostCreated }) => {
     setUploading(false);
   };
 
-  // ----------------------------------------------------
-  // CREATE POST
-  // ----------------------------------------------------
+ 
   const handleCreatePost = async () => {
     if (!content.trim() && mediaFiles.length === 0) return;
 
@@ -116,7 +110,7 @@ const CreatePost = ({ onPostCreated }) => {
       elevation={2}
       sx={{ borderRadius: 3, p: 2, mb: 3 }}
     >
-      {/* --------- Collapsed Bar --------- */}
+  
       {!open && (
         <Box display="flex" alignItems="center" gap={2}>
           <Avatar src={user?.dp} />
@@ -137,7 +131,7 @@ const CreatePost = ({ onPostCreated }) => {
         </Box>
       )}
 
-      {/* --------- Expanded Composer --------- */}
+  
       <AnimatePresence>
         {open && (
           <motion.div
@@ -158,7 +152,7 @@ const CreatePost = ({ onPostCreated }) => {
                   onChange={(e) => setContent(e.target.value)}
                 />
 
-                {/* -------- Previews -------- */}
+  
                 {mediaPreview.length > 0 && (
                   <Box mt={1} display="flex" gap={1} flexWrap="wrap">
                     {mediaPreview.map((src, i) => (
@@ -206,15 +200,14 @@ const CreatePost = ({ onPostCreated }) => {
                     ))}
                   </Box>
                 )}
-
-                {/* -------- Buttons -------- */}
+ 
                 <Box
                   mt={2}
                   display="flex"
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  {/* Upload */}
+       
                   <Box>
                     <input
                       type="file"
@@ -232,7 +225,7 @@ const CreatePost = ({ onPostCreated }) => {
                     </label>
                   </Box>
 
-                  {/* Post / Cancel */}
+       
                   <Box display="flex" gap={1}>
                     <Button color="error" onClick={reset}>
                       Cancel
