@@ -11,11 +11,11 @@ import {
 import TwitterIcon from "@mui/icons-material/Twitter";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { useThemeMode } from "../../context/ThemeContext"; // 👈 import Theme Context
+import { useThemeMode } from "../../context/ThemeContext";  
 
 const Footer = () => {
   const theme = useTheme();
-  const { mode } = useThemeMode(); // 🌙 Access dark/light mode
+  const { mode } = useThemeMode(); 
 
   return (
     <Box
@@ -37,7 +37,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="flex-start">
-          {/* 🟦 Column 1: Socials */}
+          
           <Grid item xs={12} sm={3}>
             <Typography
               variant="h6"
@@ -59,7 +59,7 @@ const Footer = () => {
             </Box>
           </Grid>
 
-          {/* 🟨 Column 2: Newsletter */}
+        
           <Grid item xs={12} sm={3}>
             <Typography
               variant="h6"
@@ -77,7 +77,7 @@ const Footer = () => {
             </Typography>
           </Grid>
 
-          {/* 🟩 Column 3: Links */}
+          
           <Grid item xs={6} sm={3}>
             <Typography
               variant="h6"
@@ -99,7 +99,7 @@ const Footer = () => {
             </Link>
           </Grid>
 
-          {/* 🟥 Column 4: Logo */}
+           
           <Grid item xs={6} sm={3} sx={{ textAlign: { sm: "right" } }}>
             <Typography
               variant="h5"
@@ -114,7 +114,7 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        {/* 🔹 Bottom Note */}
+       
         <Typography
           variant="body2"
           align="center"
