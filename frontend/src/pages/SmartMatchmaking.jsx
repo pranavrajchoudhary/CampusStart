@@ -34,7 +34,7 @@ const SmartMatchmaking = () => {
     rolesNeeded: "",
   });
 
-  // ---------------- FETCH SAVED IDEAS ----------------
+   
   useEffect(() => {
     API.get("/ideas/my")
       .then(res => setIdeas(res.data.ideas || []))
@@ -44,7 +44,7 @@ const SmartMatchmaking = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  // ---------------- MATCH EXISTING IDEA ----------------
+  //  MATCH EXISTING IDEAS cosine  
   const handleMatchExisting = async () => {
     if (!selectedIdea) return;
     setLoading(true);
@@ -57,8 +57,7 @@ const SmartMatchmaking = () => {
       setLoading(false);
     }
   };
-
-  // ---------------- CREATE + MATCH ----------------
+ 
   const handleSubmit = async () => {
     if (!form.title || !form.description) {
       alert("Title & Description required");
@@ -97,7 +96,7 @@ const SmartMatchmaking = () => {
         Your idea will be saved and used for collaboration recommendations.
       </Typography>
 
-      {/* ---------------- EXISTING IDEAS ---------------- */}
+   
       {ideas.length > 0 && (
         <Box
           mb={3}
@@ -115,7 +114,7 @@ const SmartMatchmaking = () => {
             onChange={(e) => setSelectedIdea(e.target.value)}
             sx={{
               "& .MuiSelect-select": {
-                whiteSpace: "normal",        // ✅ allow wrap
+                whiteSpace: "normal",        
               },
             }}
           >
@@ -124,7 +123,7 @@ const SmartMatchmaking = () => {
                 key={idea._id}
                 value={idea._id}
                 sx={{
-                  whiteSpace: "normal",       // ✅ mobile wrap
+                  whiteSpace: "normal",        
                   lineHeight: 1.3,
                 }}
               >
@@ -138,7 +137,7 @@ const SmartMatchmaking = () => {
             onClick={handleMatchExisting}
             disabled={!selectedIdea || loading}
             sx={{
-              alignSelf: { xs: "stretch", sm: "flex-start" }, // ✅ full width on mobile
+              alignSelf: { xs: "stretch", sm: "flex-start" },  
             }}
           >
             Match This Idea
@@ -146,7 +145,7 @@ const SmartMatchmaking = () => {
         </Box>
       )}
 
-      {/* ---------------- NEW IDEA FORM ---------------- */}
+      
       <Button
         variant="contained"
         onClick={() => setOpenForm(p => !p)}
@@ -161,7 +160,7 @@ const SmartMatchmaking = () => {
           gap={2}
           mt={2}
           sx={{
-            gridTemplateColumns: { xs: "1fr", sm: "1fr" }, // explicit mobile safety
+            gridTemplateColumns: { xs: "1fr", sm: "1fr" },  
           }}
         >
           <TextField label="Title" name="title" onChange={handleChange} fullWidth />
@@ -174,7 +173,7 @@ const SmartMatchmaking = () => {
             variant="contained"
             onClick={handleSubmit}
             disabled={loading}
-            sx={{ width: { xs: "100%", sm: "auto" } }} // ✅ mobile full width
+            sx={{ width: { xs: "100%", sm: "auto" } }}  
           >
             Create & Match
           </Button>
@@ -187,7 +186,7 @@ const SmartMatchmaking = () => {
         </Box>
       )}
 
-      {/* ---------------- MATCH RESULTS ---------------- */}
+     
       {matches.length > 0 && (
         <Grid container spacing={2} mt={3}>
           {matches.map((user) => (
@@ -217,7 +216,7 @@ const SmartMatchmaking = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    sx={{ mt: 1, width: { xs: "100%", sm: "auto" } }} // ✅ mobile full width
+                    sx={{ mt: 1, width: { xs: "100%", sm: "auto" } }}  
                     onClick={() => navigate(`/dashboard/profile/${user._id}`)}
                   >
                     See Profile
