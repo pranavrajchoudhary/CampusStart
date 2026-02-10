@@ -16,6 +16,7 @@ The project combines:
 - 🌐 **Modern web development (MERN)**
 - 🧠 **Practical Machine Learning using Python**
 - 📊 **Data-driven features for campus use cases**
+- ML MODEL DEPLOYED AT :-https://campusstart-1.onrender.com/docs
 
 This project is developed incrementally with clear separation between **frontend**, **backend**, and **ML components**.
  
