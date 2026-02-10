@@ -37,7 +37,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { mode, toggleMode } = useThemeMode(); // 🌙 dark mode hook
+  const { mode, toggleMode } = useThemeMode();  
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -68,9 +68,9 @@ const Sidebar = () => {
       color: theme.palette.text.primary,
     }}
   >
-    {/* Top: Logo + Avatar + Nav */}
+ 
     <Box sx={{ overflowY: "auto", flex: 1 }}>
-      {/* 🔹 Logo & Avatar Section */}
+ 
       <Toolbar sx={{ display: "flex", justifyContent: "center", py: 2 }}>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           CampusStart
@@ -92,7 +92,7 @@ const Sidebar = () => {
 
       <Divider sx={{ my: 1 }} />
 
-      {/* 🔹 Nav Links */}
+ 
       <List>
         {navItems.map((item) => (
           <ListItemButton
@@ -122,7 +122,7 @@ const Sidebar = () => {
       </List>
     </Box>
 
-    {/* Bottom: Theme Toggle + Logout */}
+    
     <Box>
       <Divider sx={{ my: 1, mx: 2 }} />
 
@@ -153,7 +153,7 @@ const Sidebar = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* 📱 AppBar for mobile */}
+     
       {isMobile && (
         <AppBar
           position="fixed"
@@ -177,7 +177,7 @@ const Sidebar = () => {
         </AppBar>
       )}
 
-      {/* 🖥️ Drawer */}
+     
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         open={isMobile ? mobileOpen : true}
