@@ -7,7 +7,9 @@ app = FastAPI()
 @app.get("/")
 def health():
     return { "status": "ML service running" }
-
+@app.head("/")
+def health_head():
+    return Response(status_code=200)
 @app.post("/match")
 def match(data: MatchRequest):
     ranked_users = rank_users(data.ideaText, data.users)
